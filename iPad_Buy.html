@@ -5,8 +5,122 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .container{
+            display: flex;
+            width: 1024px;
+        }
+        img{
+            width: 500px;
+        }
+        .price{
+            display: flex;
+        }
+    </style>
 </head>
 <body>
-    
+        <div class="container">
+            <div class="row">
+                <div class="pic">
+                    <img id="product-img" src="" alt="product image">
+                </div>
+            </div>
+            <div class="row">
+                <div class="title">
+                    <h2>購買iPad Air</h2>
+                </div>
+                <div class="color">
+                    <label>顏色: </label>
+                    <select id="colorFilter">
+                        <option value="太空灰色">太空灰色</option>
+                        <option value="藍色">藍色</option>
+                        <option value="粉紅色">粉紅色</option>
+                        <option value="紫色">紫色</option>
+                        <option value="星光色">星光色</option>
+                    </select>
+                </div>
+                <div class="storage">
+                    <label>容量: </label>
+                    <select id="GBFilter">
+                        <option value="64GB">64GB</option>
+                        <option value="256GB">256GB</option>
+                    </select>
+                </div>
+                <div class="network">
+                    <label>網路規格: </label>
+                    <select id="wifiFilter">
+                        <option value="Wi-Fi">Wi-Fi</option>
+                        <option value="Wi-Fi+行動網路">Wi-Fi+行動網路</option>
+                    </select>
+                </div>
+                <div class="price">
+                    <h2>NT$</h2>
+                    <h2 id="getPrice"></h2>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    <script>
+        const url = "https://raw.githubusercontent.com/ginniewu0130/iPad_hw/master/ipadair.json";
+        let ipadArray=[];
+        let xhr = new XMLHttpRequest();
+
+        function requestJSON(){
+            xhr.onload=function(){
+                let responseJSON = JSON.parse(xhr.responseText);
+                ipadArray = responseJSON;
+            }
+            xhr.open("Get",url);
+            xhr.send();
+        }
+        requestJSON();
+
+        let colorFilter = document.querySelector("#colorFilter");
+        let GBFilter = document.querySelector("#GBFilter");
+        let wifiFilter = document.querySelector("#wifiFilter");
+
+        colorFilter.addEventListener("change", function() {
+        let selectedColor = this.value;
+        let selectedGB = GBFilter.value;
+        let selectedWifi = wifiFilter.value;
+        let filteredProduct = ipadArray.filter(function(ipad) {
+            return ipad.color == selectedColor && ipad.storage == selectedGB && ipad.network == selectedWifi;
+        });
+        let productImg = document.getElementById("product-img");
+        productImg.src = filteredProduct[0].picture;
+        document.querySelector("#getPrice").textContent = filteredProduct[0].price;
+        });
+
+        GBFilter.addEventListener("change", function() {
+        let selectedColor = colorFilter.value;
+        let selectedGB = this.value;
+        let selectedWifi = wifiFilter.value;
+        let filteredProduct = ipadArray.filter(function(ipad) {
+            return ipad.color == selectedColor && ipad.storage == selectedGB && ipad.network == selectedWifi;
+        });
+        let productImg = document.getElementById("product-img");
+        productImg.src = filteredProduct[0].picture;
+        document.querySelector("#getPrice").textContent = filteredProduct[0].price;
+        });
+
+        wifiFilter.addEventListener("change", function() {
+        let selectedColor = colorFilter.value;
+        let selectedGB = GBFilter.value;
+        let selectedWifi = this.value;
+        let filteredProduct = ipadArray.filter(function(ipad) {
+            return ipad.color == selectedColor && ipad.storage == selectedGB && ipad.network == selectedWifi;
+        });
+        let productImg = document.getElementById("product-img");
+        productImg.src = filteredProduct[0].picture;
+        document.querySelector("#getPrice").textContent = filteredProduct[0].price;
+        });
+
+
+    </script>
 </body>
 </html>
